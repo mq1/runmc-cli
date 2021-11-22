@@ -15,8 +15,7 @@ clap = "3.0.0-beta.5"
 git = "https://github.com/mq1/libmc.git"
 
 [profile.release]
-panic = "abort"
-codegen-units = 1
-lto = true
-incremental = false
-opt-level = "z"
+opt-level = "z"     # Optimize for size.
+lto = true          # Enable Link Time Optimization
+codegen-units = 1   # Reduce number of codegen units to increase optimizations.
+panic = "abort"     # Abort on panic
