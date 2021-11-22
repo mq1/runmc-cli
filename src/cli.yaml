@@ -5,3 +5,6 @@ about: A command line interface for runmc
 args:
   - list-minecraft-versions:
       long: list-minecraft-versions
+  - list-instances:
+      short: l
+      long: list-instances
