@@ -1,0 +1,7 @@
+name: runmc-cli
+version: "0.1.0"
+author: Manuel Quarneti <manuelquarneti@gmail.com>
+about: A command line interface for runmc
+args:
+  - list-minecraft-versions:
+      long: list-minecraft-versions
