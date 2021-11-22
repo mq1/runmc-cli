@@ -1,20 +1,56 @@
-use clap::{App, load_yaml};
+use clap::Parser;
 use std::error::Error;
 
-fn main() -> Result<(), Box<dyn Error>> {
-    let yaml = load_yaml!("cli.yaml");
-    let matches = App::from(yaml).get_matches();
+#[derive(Parser)]
+#[clap(
+    version = "0.1.0",
+    author = "Manuel Quarneti <manuelquarneti@gmail.com>"
+)]
+struct Opts {
+    #[clap(short, long)]
+    list_minecraft_versions: bool,
 
-    if matches.is_present("list-minecraft-versions") {
+    #[clap(subcommand)]
+    subcmd: SubCommand,
+}
+
+#[derive(Parser)]
+enum SubCommand {
+    Instance(Instance),
+}
+
+/// A subcommand for controlling testing
+#[derive(Parser)]
+struct Instance {
+    #[clap(subcommand)]
+    subcmd: InstanceSubCommand,
+}
+
+#[derive(Parser)]
+enum InstanceSubCommand {
+    List,
+}
+
+fn main() -> Result<(), Box<dyn Error>> {
+    let opts: Opts = Opts::parse();
+
+    if opts.list_minecraft_versions {
         let versions = libmc::launchermeta::get_minecraft_versions()?;
-        versions.iter().for_each(|version| println!("{} {}", version.r#type, version.id));
-        return Ok(())
+        versions
+            .iter()
+            .for_each(|version| println!("{} {}", version.r#type, version.id));
+        return Ok(());
     }
 
-    if matches.is_present("list-instances") {
-        let instances = libmc::instances::get_instance_list()?;
-        instances.iter().for_each(|instance| println!("{}", instance));
-        return Ok(())
+    match opts.subcmd {
+        SubCommand::Instance(i) => match i.subcmd {
+            InstanceSubCommand::List => {
+                let instances = libmc::instances::get_instance_list()?;
+                instances
+                    .iter()
+                    .for_each(|instance| println!("{}", instance));
+            }
+        },
     }
 
     Ok(())
