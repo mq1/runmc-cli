@@ -1,4 +1,5 @@
 use clap::{Parser, Subcommand};
+use libmc::accounts::authenticate;
 use std::{error::Error, path::Path};
 
 #[derive(Parser)]
@@ -13,6 +14,7 @@ enum Commands {
     ListMinecraftVersions,
     Instance(Instance),
     Config,
+    Account(Account)
 }
 
 #[derive(Parser)]
@@ -24,6 +26,17 @@ struct Instance {
 #[derive(Subcommand)]
 enum InstanceCommand {
     List,
+}
+
+#[derive(Parser)]
+struct Account {
+    #[clap(subcommand)]
+    command: AccountCommand,
+}
+
+#[derive(Subcommand)]
+enum AccountCommand {
+    Add
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -53,6 +66,14 @@ fn main() -> Result<(), Box<dyn Error>> {
                 libmc::config::new()?;
             }
             println!("config path: {:?}", &config_path);
+        },
+        Commands::Account(a) => match &a.command {
+            AccountCommand::Add => {
+                let (device_code, user_code, verification_uri) = libmc::accounts::authorize_device()?;
+                println!("Go to: {}", verification_uri);
+                println!("And enter this code: {}", user_code);
+                authenticate(&device_code)?
+            },
         }
     }
 
