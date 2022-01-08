@@ -1,18 +1,15 @@
-use clap::Parser;
+use clap::{Parser, Subcommand};
 use std::{error::Error, path::Path};
 
 #[derive(Parser)]
-#[clap(
-    version = "0.1.0",
-    author = "Manuel Quarneti <manuelquarneti@gmail.com>"
-)]
-struct Opts {
+#[clap(about, version, author)]
+struct Cli {
     #[clap(subcommand)]
-    subcmd: SubCommand,
+    command: Commands,
 }
 
-#[derive(Parser)]
-enum SubCommand {
+#[derive(Subcommand)]
+enum Commands {
     ListMinecraftVersions,
     Instance(Instance),
     Config,
@@ -21,11 +18,11 @@ enum SubCommand {
 #[derive(Parser)]
 struct Instance {
     #[clap(subcommand)]
-    subcmd: InstanceSubCommand,
+    command: InstanceCommand,
 }
 
-#[derive(Parser)]
-enum InstanceSubCommand {
+#[derive(Subcommand)]
+enum InstanceCommand {
     List,
 }
 
@@ -33,29 +30,29 @@ fn main() -> Result<(), Box<dyn Error>> {
     let base_dir = libmc::util::get_base_dir()?;
     std::fs::create_dir_all(base_dir)?;
 
-    let opts: Opts = Opts::parse();
+    let cli = Cli::parse();
 
-    match opts.subcmd {
-        SubCommand::ListMinecraftVersions => {
+    match &cli.command {
+        Commands::ListMinecraftVersions => {
             let versions = libmc::launchermeta::get_minecraft_versions()?;
             versions
                 .iter()
                 .for_each(|version| println!("{} {}", version.r#type, version.id));
         },
-        SubCommand::Instance(i) => match i.subcmd {
-            InstanceSubCommand::List => {
+        Commands::Instance(i) => match &i.command {
+            InstanceCommand::List => {
                 let instances = libmc::instances::get_instance_list()?;
                 instances
                     .iter()
                     .for_each(|instance| println!("{}", instance));
             }
         },
-        SubCommand::Config => {
+        Commands::Config => {
             let config_path = libmc::config::get_config_path()?;
             if !Path::is_file(&config_path) {
                 libmc::config::new()?;
             }
-            open::that(config_path)?;
+            println!("config path: {:?}", &config_path);
         }
     }
 
