@@ -41,8 +41,6 @@ enum AccountCommand {
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-    fs::create_dir_all(libmc::BASE_DIR.as_path())?;
-
     let cli = Cli::parse();
 
     match &cli.command {

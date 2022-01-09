@@ -13,7 +13,7 @@ clap = { version = "3", features = ["derive"] }
 
 [dependencies.libmc]
 git = "https://github.com/mq1/libmc.git"
-rev = "66c89bc042038776c24c14a0184a031a632f3d12"
+rev = "72f73198cbdbf8ce3304840a15a9a9c262e51d77"
 
 [profile.release]
 opt-level = "z"     # Optimize for size.
