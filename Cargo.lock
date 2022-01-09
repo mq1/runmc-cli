@@ -198,13 +198,15 @@ checksum = "8521a1b57e76b1ec69af7599e75e38e7b7fad6610f037db8c79b127201b5d119"
 [[package]]
 name = "libmc"
 version = "0.1.0"
-source = "git+https://github.com/mq1/libmc.git?rev=92409e383cc61968e498575e28b69b3ddbbf3a6a#92409e383cc61968e498575e28b69b3ddbbf3a6a"
+source = "git+https://github.com/mq1/libmc.git?rev=66c89bc042038776c24c14a0184a031a632f3d12#66c89bc042038776c24c14a0184a031a632f3d12"
 dependencies = [
  "directories",
+ "lazy_static",
  "serde",
  "serde_json",
  "toml",
  "ureq",
+ "url",
 ]
 
 [[package]]
@@ -509,6 +511,7 @@ dependencies = [
  "idna",
  "matches",
  "percent-encoding",
+ "serde",
 ]
 
 [[package]]

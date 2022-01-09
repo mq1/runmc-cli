@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
 use libmc::accounts::authenticate;
-use std::{error::Error, path::Path};
+use std::{error::Error, fs};
 
 #[derive(Parser)]
 #[clap(about, version, author)]
@@ -14,7 +14,7 @@ enum Commands {
     ListMinecraftVersions,
     Instance(Instance),
     Config,
-    Account(Account)
+    Account(Account),
 }
 
 #[derive(Parser)]
@@ -36,12 +36,12 @@ struct Account {
 
 #[derive(Subcommand)]
 enum AccountCommand {
-    Add
+    Add,
+    List,
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let base_dir = libmc::util::get_base_dir()?;
-    std::fs::create_dir_all(base_dir)?;
+    fs::create_dir_all(libmc::BASE_DIR.as_path())?;
 
     let cli = Cli::parse();
 
@@ -51,7 +51,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             versions
                 .iter()
                 .for_each(|version| println!("{} {}", version.r#type, version.id));
-        },
+        }
         Commands::Instance(i) => match &i.command {
             InstanceCommand::List => {
                 let instances = libmc::instances::get_instance_list()?;
@@ -61,20 +61,24 @@ fn main() -> Result<(), Box<dyn Error>> {
             }
         },
         Commands::Config => {
-            let config_path = libmc::config::get_config_path()?;
-            if !Path::is_file(&config_path) {
-                libmc::config::new()?;
-            }
-            println!("config path: {:?}", &config_path);
-        },
+            let _config = libmc::config::read()?;
+            println!("config path: {:?}", libmc::config::CONFIG_PATH.as_path());
+        }
         Commands::Account(a) => match &a.command {
             AccountCommand::Add => {
-                let (device_code, user_code, verification_uri) = libmc::accounts::authorize_device()?;
+                let (device_code, user_code, verification_uri) =
+                    libmc::accounts::authorize_device()?;
                 println!("Go to: {}", verification_uri);
                 println!("And enter this code: {}", user_code);
                 authenticate(&device_code)?
-            },
-        }
+            }
+            AccountCommand::List => {
+                let user_profiles = libmc::accounts::list_user_profiles()?;
+                for user_profile in user_profiles {
+                    println!("{}", user_profile.name);
+                }
+            }
+        },
     }
 
     Ok(())
