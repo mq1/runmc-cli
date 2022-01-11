@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
 use libmc::accounts::authenticate;
-use std::{error::Error, fs};
+use std::error::Error;
 
 #[derive(Parser)]
 #[clap(about, version, author)]
