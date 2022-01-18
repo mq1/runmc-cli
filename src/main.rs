@@ -64,16 +64,16 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
         Commands::Account(a) => match &a.command {
             AccountCommand::Add => {
-                let (device_code, user_code, verification_uri) =
-                    libmc::accounts::authorize_device()?;
-                println!("Go to: {}", verification_uri);
-                println!("And enter this code: {}", user_code);
-                authenticate(&device_code)?
+                let resp = libmc::accounts::authorize_device()?;
+                println!("Go to: {}", resp.verification_uri);
+                println!("And enter this code: {}", resp.user_code);
+                authenticate(&resp.device_code)?
             }
             AccountCommand::List => {
-                let user_profiles = libmc::accounts::list_user_profiles()?;
-                for user_profile in user_profiles {
-                    println!("{}", user_profile.name);
+                let accounts = libmc::accounts::list()?;
+
+                for i in 0..accounts.len() {
+                    println!("{}. {}", i, accounts[i].1.name);
                 }
             }
         },
