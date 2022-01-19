@@ -1,5 +1,4 @@
 use clap::{Parser, Subcommand};
-use libmc::accounts::authenticate;
 use std::error::Error;
 
 #[derive(Parser)]
@@ -67,7 +66,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                 let resp = libmc::accounts::authorize_device()?;
                 println!("Go to: {}", resp.verification_uri);
                 println!("And enter this code: {}", resp.user_code);
-                authenticate(&resp.device_code)?
+                libmc::accounts::authenticate(&resp.device_code)?
             }
             AccountCommand::List => {
                 for (_, user_profile) in libmc::accounts::list()? {
