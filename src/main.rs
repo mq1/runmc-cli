@@ -70,10 +70,8 @@ fn main() -> Result<(), Box<dyn Error>> {
                 authenticate(&resp.device_code)?
             }
             AccountCommand::List => {
-                let accounts = libmc::accounts::list()?;
-
-                for i in 0..accounts.len() {
-                    println!("{}. {}", i, accounts[i].1.name);
+                for (_, user_profile) in libmc::accounts::list()? {
+                    println!("{}", user_profile.name);
                 }
             }
         },
