@@ -58,7 +58,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             }
         },
         Commands::Config => {
-            let _config = libmc::config::read()?;
+            let _ = libmc::config::read()?;
             println!("config path: {:?}", libmc::config::CONFIG_PATH.as_path());
         }
         Commands::Account(a) => match &a.command {
