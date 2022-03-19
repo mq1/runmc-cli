@@ -10,10 +10,11 @@ license = "GPL-3.0-or-later"
 
 [dependencies]
 clap = { version = "3", features = ["derive"] }
+anyhow = "1"
 
 [dependencies.libmc]
 git = "https://github.com/mq1/libmc.git"
-rev = "21fa43e62d56fc58c4d2d0d6a85b2b3d3548a904"
+rev = "e72d93e6e9901463c5bd95a5b24a026212f348d1"
 
 [profile.release]
 opt-level = "z"     # Optimize for size.

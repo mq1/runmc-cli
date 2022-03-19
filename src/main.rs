@@ -1,5 +1,5 @@
+use anyhow::Result;
 use clap::{Parser, Subcommand};
-use std::error::Error;
 
 #[derive(Parser)]
 #[clap(about, version, author)]
@@ -37,9 +37,10 @@ struct Account {
 enum AccountCommand {
     Add,
     List,
+    Remove { name: String },
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() -> Result<()> {
     let cli = Cli::parse();
 
     match &cli.command {
@@ -63,15 +64,19 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
         Commands::Account(a) => match &a.command {
             AccountCommand::Add => {
-                let resp = libmc::accounts::authorize_device()?;
-                println!("Go to: {}", resp.verification_uri);
-                println!("And enter this code: {}", resp.user_code);
-                libmc::accounts::authenticate(&resp.device_code)?
+                let auth_url = libmc::msa::get_authorization_url()?;
+                println!("Go to: {}", auth_url);
+
+                let account = libmc::msa::get_account()?;
+                libmc::accounts::add(account)?;
             }
             AccountCommand::List => {
-                for (_, user_profile) in libmc::accounts::list()? {
-                    println!("{}", user_profile.name);
+                for account in libmc::accounts::list()? {
+                    println!("{}", account);
                 }
+            }
+            AccountCommand::Remove { name } => {
+                libmc::accounts::remove(name)?;
             }
         },
     }
