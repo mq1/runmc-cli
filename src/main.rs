@@ -64,11 +64,10 @@ fn main() -> Result<()> {
         }
         Commands::Account(a) => match &a.command {
             AccountCommand::Add => {
-                let auth_url = libmc::msa::get_authorization_url()?;
+                let auth_url = libmc::accounts::get_auth_url()?;
                 println!("Go to: {}", auth_url);
 
-                let account = libmc::msa::get_account()?;
-                libmc::accounts::add(account)?;
+                libmc::accounts::add()?;
             }
             AccountCommand::List => {
                 for account in libmc::accounts::list()? {
