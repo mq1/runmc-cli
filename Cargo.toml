@@ -12,9 +12,9 @@ license = "GPL-3.0-or-later"
 clap = { version = "3", features = ["derive"] }
 anyhow = "1"
 
-[dependencies.libmc]
-git = "https://github.com/mq1/libmc.git"
-rev = "939d3d41c43ab4024b9af227498a150c94bb8399"
+[dependencies.minecraft-launcher-lib]
+git = "https://github.com/mq1/minecraft-launcher-lib-rs.git"
+rev = "1f971b689c9706f46f1536378207ff245b0dffd7"
 
 [profile.release]
 opt-level = "z"     # Optimize for size.

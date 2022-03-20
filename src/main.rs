@@ -1,5 +1,6 @@
 use anyhow::Result;
 use clap::{Parser, Subcommand};
+use minecraft_launcher_lib as mc;
 
 #[derive(Parser)]
 #[clap(about, version, author)]
@@ -45,37 +46,37 @@ fn main() -> Result<()> {
 
     match &cli.command {
         Commands::ListMinecraftVersions => {
-            let versions = libmc::launchermeta::get_minecraft_versions()?;
+            let versions = mc::launchermeta::get_minecraft_versions()?;
             versions
                 .iter()
                 .for_each(|version| println!("{} {}", version.r#type, version.id));
         }
         Commands::Instance(i) => match &i.command {
             InstanceCommand::List => {
-                let instances = libmc::instances::get_instance_list()?;
+                let instances = mc::instances::get_instance_list()?;
                 instances
                     .iter()
                     .for_each(|instance| println!("{}", instance));
             }
         },
         Commands::Config => {
-            let _ = libmc::config::read()?;
-            println!("config path: {:?}", libmc::config::CONFIG_PATH.as_path());
+            let _ = mc::config::read()?;
+            println!("config path: {:?}", mc::config::CONFIG_PATH.as_path());
         }
         Commands::Account(a) => match &a.command {
             AccountCommand::Add => {
-                let auth_url = libmc::accounts::get_auth_url()?;
+                let auth_url = mc::accounts::get_auth_url()?;
                 println!("Go to: {}", auth_url);
 
-                libmc::accounts::add()?;
+                mc::accounts::add()?;
             }
             AccountCommand::List => {
-                for account in libmc::accounts::list()? {
+                for account in mc::accounts::list()? {
                     println!("{}", account);
                 }
             }
             AccountCommand::Remove { name } => {
-                libmc::accounts::remove(name)?;
+                mc::accounts::remove(name)?;
             }
         },
     }
