@@ -390,7 +390,7 @@ checksum = "8521a1b57e76b1ec69af7599e75e38e7b7fad6610f037db8c79b127201b5d119"
 [[package]]
 name = "libmc"
 version = "0.1.0"
-source = "git+https://github.com/mq1/libmc.git?rev=e72d93e6e9901463c5bd95a5b24a026212f348d1#e72d93e6e9901463c5bd95a5b24a026212f348d1"
+source = "git+https://github.com/mq1/libmc.git?rev=12cdb502d7f7f88b42a45412b9688f07c29a0a68#12cdb502d7f7f88b42a45412b9688f07c29a0a68"
 dependencies = [
  "anyhow",
  "base64-url",

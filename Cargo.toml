@@ -14,7 +14,7 @@ anyhow = "1"
 
 [dependencies.libmc]
 git = "https://github.com/mq1/libmc.git"
-rev = "e72d93e6e9901463c5bd95a5b24a026212f348d1"
+rev = "12cdb502d7f7f88b42a45412b9688f07c29a0a68"
 
 [profile.release]
 opt-level = "z"     # Optimize for size.
