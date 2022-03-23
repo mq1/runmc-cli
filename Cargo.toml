@@ -12,7 +12,8 @@ license = "GPL-3.0-or-later"
 clap = { version = "3", features = ["derive"] }
 anyhow = "1"
 
-[dependencies.minecraft-launcher-lib]
+[dependencies.mc]
+package = "minecraft-launcher-lib"
 git = "https://github.com/mq1/minecraft-launcher-lib-rs.git"
 rev = "1f971b689c9706f46f1536378207ff245b0dffd7"
 

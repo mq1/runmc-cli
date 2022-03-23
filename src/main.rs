@@ -1,6 +1,5 @@
 use anyhow::Result;
 use clap::{Parser, Subcommand};
-use minecraft_launcher_lib as mc;
 
 #[derive(Parser)]
 #[clap(about, version, author)]
